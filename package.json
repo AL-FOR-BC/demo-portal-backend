@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "build/index.js",
   "scripts": {
-    "start": "node start.js",
+    "start": "npx ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "node build-simple.js",
     "build:debug": "node build-debug.js",
