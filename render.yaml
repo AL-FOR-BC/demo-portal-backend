@@ -2,7 +2,7 @@ services:
   - type: web
     name: demo-portal-backend
     env: node
-    buildCommand: npm install && npm run build && echo "=== Build Directory Contents ===" && ls -la && echo "=== Build Output ===" && ls -la build/ || echo "Build directory not found"
+    buildCommand: npm install && npm run build
     startCommand: npm start
     envVars:
       - key: NODE_ENV

@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node start.js",
     "dev": "nodemon src/index.ts",
-    "build": "rimraf ./build && tsc --project .",
+    "build": "node build-simple.js",
     "build:debug": "node build-debug.js",
     "start:dev": "npm run build && node build/index.js",
     "postbuild": "node build-debug.js"
