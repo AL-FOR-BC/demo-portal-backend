@@ -16,6 +16,13 @@ export const UserLogin = async (
   next: NextFunction
 ) => {
   try {
+    console.log("UserLogin request received:", {
+      body: req.body,
+      headers: req.headers["content-type"],
+      method: req.method,
+      url: req.url,
+    });
+
     const { email, password } = req.body;
 
     const user = await User.findOne({ email: email });

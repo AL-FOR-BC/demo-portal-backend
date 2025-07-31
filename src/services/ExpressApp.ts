@@ -6,6 +6,26 @@ import { AdminRoutes, AuthBcRoutes, UserRoutes } from "../routes";
 export default async (app: Application) => {
   app.use(express.json({ limit: "30mb" }));
   app.use(express.urlencoded({ extended: true }));
+
+  // Add error handling for JSON parsing
+  app.use((err: any, req: any, res: any, next: any) => {
+    console.log("Error details:", {
+      message: err.message,
+      status: err.status,
+      type: err.constructor.name,
+      body: req.body,
+      headers: req.headers["content-type"],
+    });
+
+    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+      return res.status(400).json({
+        error: "Invalid JSON format",
+        details: err.message,
+        receivedBody: req.body,
+      });
+    }
+    next();
+  });
   const imagePath = path.join(__dirname, "../images");
   console.log(imagePath);
 
