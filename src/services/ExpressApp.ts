@@ -43,6 +43,7 @@ export default async (app: Application) => {
   app.use(
     cors({
       origin: [
+        "https://demo-portal-60q4.onrender.com",
         "https://demo-portal-backend-h13a.onrender.com",
         "http://localhost:3000",
         "http://localhost:3001",
