@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model app_setup {
+  setup_id        Int      @id @default(autoincrement())
+  base_url        String   @db.VarChar(50)
+  default_company String   @db.VarChar(50)
+  ehub_username   String   @db.VarChar(20)
+  ehub_pass       String   @db.VarChar(255)
+  last_modified   DateTime @db.DateTime(0)
+  modified_by     String   @db.VarChar(50)
+}
+
+model projectsetup {
+  id        String   @id
+  logo      String
+  name      String
+  color     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+}
+
+model bc_configs {
+  id           String  @id @default(uuid())
+  tenant       String
+  clientId     String
+  clientSecret String
+  url          String
+  email        String?
+  password     String?
+  companyId    String  @default("")
+}
+
+model users {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  salt      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  verified  Boolean  @default(false)
+  isAdmin   Boolean  @default(false)
+}
+
+model settings {
+  id                 String  @id @default(uuid())
+  allowCompanyChange Boolean @default(false)
+  themeColor         String  @default("#094BAC")
+  companyLogo        String? @db.LongText
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model applicant_profile {
+  email                    String   @db.VarChar(50)
+  first_name               String   @db.VarChar(60)
+  middle_name              String?  @db.VarChar(60)
+  last_name                String   @db.VarChar(60)
+  gender                   String   @db.VarChar(60)
+  applicant_address        String?  @db.VarChar(255)
+  national_id_number       String   @db.VarChar(50)
+  mobile_no                String   @db.VarChar(60)
+  birth_date               DateTime @db.Date
+  birth_district           String?  @db.VarChar(50)
+  district_of_origin       String?  @db.VarChar(50)
+  nationality              String   @db.VarChar(50)
+  passport_number          String?  @db.VarChar(60)
+  marital_status           String   @db.VarChar(60)
+  relative_in_organisation Boolean
+  last_modified            DateTime @db.Date
+
+  @@ignore
+}
