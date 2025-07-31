@@ -39,8 +39,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 var ExpressApp_1 = __importDefault(require("./services/ExpressApp"));
 var config_1 = require("./config");
+var MongoDB_1 = require("./utils/MongoDB");
 var express_1 = __importDefault(require("express"));
 var StartServer = function () { return __awaiter(void 0, void 0, void 0, function () {
     var app;
@@ -48,10 +51,11 @@ var StartServer = function () { return __awaiter(void 0, void 0, void 0, functio
         switch (_a.label) {
             case 0:
                 app = (0, express_1.default)();
-                //   await dbConnection();
-                return [4 /*yield*/, (0, ExpressApp_1.default)(app)];
+                return [4 /*yield*/, (0, MongoDB_1.connectDB)()];
             case 1:
-                //   await dbConnection();
+                _a.sent();
+                return [4 /*yield*/, (0, ExpressApp_1.default)(app)];
+            case 2:
                 _a.sent();
                 app.listen(config_1.PORT, function () {
                     console.log("Listening to port ".concat(config_1.PORT));

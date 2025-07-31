@@ -1,5 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
-import { prisma } from "../utils/Prismadb";
+import { User } from "../models/User";
 import {
   GeneratePassword,
   GenerateSalt,
@@ -18,16 +18,13 @@ export const UserLogin = async (
   try {
     const { email, password } = req.body;
 
-    const user = await prisma.users.findUnique({
-      where: { email: email },
-    });
+    const user = await User.findOne({ email: email });
 
     if (user) {
       const validation = await ValidatePassword(
         password,
         user.password,
         user.salt
-        
       );
       if (validation) {
         const signature = await GenerateSignature({
@@ -74,9 +71,7 @@ export const UserRegister = async (
 
   const { email, password } = req.body;
   try {
-    const existingUser = await prisma.users.findUnique({
-      where: { email },
-    });
+    const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(401).json({
         msg: `User with email ${email} already exists`,
@@ -84,13 +79,10 @@ export const UserRegister = async (
     }
     const salt = await GenerateSalt();
     const userPassword = await GeneratePassword(password, salt);
-    const user = await prisma.users.create({
-      data: {
-        email: email,
-        password: userPassword,
-        salt: salt,
-        updatedAt: new Date(),
-      },
+    const user = await User.create({
+      email: email,
+      password: userPassword,
+      salt: salt,
     });
     return res.status(200).json({
       ...user,

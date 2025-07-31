@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetBcConfig = exports.AuthToken = void 0;
-var Prismadb_1 = require("../utils/Prismadb");
+var BcConfig_1 = require("../models/BcConfig");
 var axios_1 = __importDefault(require("axios"));
 var AuthToken = function (req, res, next) { return __awaiter(void 0, void 0, void 0, function () {
     var config, tenant, clientSecret, clientId, url, data, response, e_1;
@@ -48,9 +48,7 @@ var AuthToken = function (req, res, next) { return __awaiter(void 0, void 0, voi
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 3, , 4]);
-                return [4 /*yield*/, Prismadb_1.prisma.bc_configs.findUnique({
-                        where: { id: "1" },
-                    })];
+                return [4 /*yield*/, BcConfig_1.BcConfig.findOne({ _id: "2" })];
             case 1:
                 config = _a.sent();
                 console.log(config);
@@ -90,9 +88,7 @@ var GetBcConfig = function (req, res, next) { return __awaiter(void 0, void 0, v
         switch (_a.label) {
             case 0:
                 _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, Prismadb_1.prisma.bc_configs.findUnique({
-                        where: { id: "1" },
-                    })];
+                return [4 /*yield*/, BcConfig_1.BcConfig.findOne({ _id: "1" })];
             case 1:
                 config = _a.sent();
                 return [2 /*return*/, res.json(config)];

@@ -48,7 +48,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRegister = exports.UserLogin = void 0;
-var Prismadb_1 = require("../utils/Prismadb");
+var User_1 = require("../models/User");
 var PasswordUtils_1 = require("../utils/PasswordUtils");
 var class_transformer_1 = require("class-transformer");
 var User_dto_1 = require("../@types/User.dto");
@@ -60,9 +60,7 @@ var UserLogin = function (req, res, next) { return __awaiter(void 0, void 0, voi
             case 0:
                 _b.trys.push([0, 6, , 7]);
                 _a = req.body, email = _a.email, password = _a.password;
-                return [4 /*yield*/, Prismadb_1.prisma.users.findUnique({
-                        where: { email: email },
-                    })];
+                return [4 /*yield*/, User_1.User.findOne({ email: email })];
             case 1:
                 user = _b.sent();
                 if (!user) return [3 /*break*/, 5];
@@ -119,9 +117,7 @@ var UserRegister = function (req, res, next) { return __awaiter(void 0, void 0, 
                 _b.label = 2;
             case 2:
                 _b.trys.push([2, 7, , 8]);
-                return [4 /*yield*/, Prismadb_1.prisma.users.findUnique({
-                        where: { email: email },
-                    })];
+                return [4 /*yield*/, User_1.User.findOne({ email: email })];
             case 3:
                 existingUser = _b.sent();
                 if (existingUser) {
@@ -135,13 +131,10 @@ var UserRegister = function (req, res, next) { return __awaiter(void 0, void 0, 
                 return [4 /*yield*/, (0, PasswordUtils_1.GeneratePassword)(password, salt)];
             case 5:
                 userPassword = _b.sent();
-                return [4 /*yield*/, Prismadb_1.prisma.users.create({
-                        data: {
-                            email: email,
-                            password: userPassword,
-                            salt: salt,
-                            updatedAt: new Date(),
-                        },
+                return [4 /*yield*/, User_1.User.create({
+                        email: email,
+                        password: userPassword,
+                        salt: salt,
                     })];
             case 6:
                 user = _b.sent();

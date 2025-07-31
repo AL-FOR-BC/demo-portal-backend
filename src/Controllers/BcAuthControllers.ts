@@ -1,4 +1,4 @@
-import { prisma } from "../utils/Prismadb";
+import { BcConfig } from "../models/BcConfig";
 import axios from "axios";
 import express, { NextFunction, Request, Response } from "express";
 
@@ -8,10 +8,8 @@ export const AuthToken = async (
   next: NextFunction
 ) => {
   try {
-    const config = await prisma.bc_configs.findUnique({
-      where: { id: "1" },
-    });
-    console.log(config)
+    const config = await BcConfig.findOne({ _id: "2" });
+    console.log(config);
 
     if (!config) {
       return res.status(404).json({ error: "Configuration not found" });
@@ -47,9 +45,7 @@ export const GetBcConfig = async (
   next: NextFunction
 ) => {
   try {
-    const config = await prisma.bc_configs.findUnique({
-      where: { id: "1" },
-    });
+    const config = await BcConfig.findOne({ _id: "1" });
 
     return res.json(config);
   } catch (e) {
