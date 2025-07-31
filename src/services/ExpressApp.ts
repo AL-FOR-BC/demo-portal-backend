@@ -25,13 +25,17 @@ export default async (app: Application) => {
   app.use((err: any, req: any, res: any, next: any) => {
     console.log("Error details:", {
       message: err.message,
-      status: err.status,
+      status: (err as any).status,
       type: err.constructor.name,
       body: req.body,
       headers: req.headers["content-type"],
     });
 
-    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    if (
+      err instanceof SyntaxError &&
+      (err as any).status === 400 &&
+      "body" in err
+    ) {
       return res.status(400).json({
         error: "Invalid JSON format",
         details: err.message,
