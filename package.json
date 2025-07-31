@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node build/index.js",
     "dev": "nodemon src/index.ts",
-    "build": "rimraf ./build && tsc",
+    "build": "rimraf ./build && tsc --project .",
     "start:dev": "npm run build && node build/index.js",
     "seed": "ts-node scripts/seed-mongodb.ts"
   },
