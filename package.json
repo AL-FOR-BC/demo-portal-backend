@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "main": "build/index.js",
   "scripts": {
-    "start": "node build/index.js",
+    "start": "node start.js",
     "dev": "nodemon src/index.ts",
     "build": "rimraf ./build && tsc --project .",
+    "build:debug": "node build-debug.js",
     "start:dev": "npm run build && node build/index.js",
-    "seed": "ts-node scripts/seed-mongodb.ts"
+    "postbuild": "node build-debug.js"
   },
   "keywords": [],
   "author": "",
