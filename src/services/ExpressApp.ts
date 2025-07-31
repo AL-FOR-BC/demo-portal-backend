@@ -6,7 +6,21 @@ import { AdminRoutes, AuthBcRoutes, UserRoutes } from "../routes";
 export default async (app: Application) => {
   app.use(express.json({ limit: "30mb" }));
   app.use(express.urlencoded({ extended: true }));
-
+  app.use(
+    cors({
+      origin: [
+        "https://demo-portal-60q4.onrender.com",
+        "https://demo-portal-backend-h13a.onrender.com",
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:5173",
+        "http://localhost:8080",
+      ],
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+    })
+  );
   // Add error handling for JSON parsing
   app.use((err: any, req: any, res: any, next: any) => {
     console.log("Error details:", {
@@ -40,21 +54,6 @@ export default async (app: Application) => {
     });
   });
 
-  app.use(
-    cors({
-      origin: [
-        "https://demo-portal-60q4.onrender.com",
-        "https://demo-portal-backend-h13a.onrender.com",
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:5173",
-        "http://localhost:8080",
-      ],
-      credentials: true,
-      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-    })
-  );
   app.use("/api/user", UserRoutes);
   app.use("/api", AuthBcRoutes);
   // app.use("/api/bc", AuthBcRoutes)
