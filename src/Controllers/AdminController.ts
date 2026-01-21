@@ -6,6 +6,9 @@ interface SettingsData {
   allowCompanyChange?: boolean;
   themeColor?: string;
   companyLogo?: string | null;
+  favicon?: string | null;
+  shortcutDimCode1?: string | null;
+  shortcutDimCode2?: string | null;
 }
 
 export const GetSettings = async (req: Request, res: Response) => {
@@ -19,6 +22,9 @@ export const GetSettings = async (req: Request, res: Response) => {
         allowCompanyChange: false,
         themeColor: "#094BAC",
         companyLogo: null,
+        favicon: null,
+        shortcutDimCode1: "",
+        shortcutDimCode2: "",
       });
       return res.json(defaultSettings);
     }
@@ -45,8 +51,14 @@ export const GetSettings = async (req: Request, res: Response) => {
 
 export const UpdateSettings = async (req: Request, res: Response) => {
   try {
-    const { allowCompanyChange, themeColor, companyLogo }: SettingsData =
-      req.body;
+    const {
+      allowCompanyChange,
+      themeColor,
+      companyLogo,
+      favicon,
+      shortcutDimCode1,
+      shortcutDimCode2,
+    }: SettingsData = req.body;
 
     // Debug logging for logo data
     if (companyLogo && typeof companyLogo === "string") {
@@ -103,6 +115,67 @@ export const UpdateSettings = async (req: Request, res: Response) => {
       }
     }
 
+    // Validate favicon (if provided, should be base64 or null)
+    if (favicon !== null && favicon !== undefined) {
+      if (typeof favicon !== "string") {
+        return res
+          .status(400)
+          .json({ error: "Favicon must be a string or null" });
+      }
+
+      if (!favicon.startsWith("data:image/")) {
+        return res
+          .status(400)
+          .json({ error: "Favicon must be a valid base64 data URL" });
+      }
+
+      const base64Data = favicon.split(",")[1];
+      if (base64Data) {
+        const sizeInBytes = Math.ceil((base64Data.length * 3) / 4);
+        const sizeInMB = sizeInBytes / (1024 * 1024);
+        if (sizeInMB > 5) {
+          return res
+            .status(400)
+            .json({ error: "Favicon size must be less than 5MB" });
+        }
+      }
+
+      const allowedFormats = [
+        "image/png",
+        "image/jpeg",
+        "image/jpg",
+        "image/svg+xml",
+        "image/x-icon",
+        "image/vnd.microsoft.icon",
+      ];
+      const format = favicon.match(/data:([^;]+)/)?.[1];
+      if (format && !allowedFormats.includes(format)) {
+        return res.status(400).json({
+          error: "Favicon must be PNG, JPG, SVG, or ICO format",
+        });
+      }
+    }
+
+    if (
+      shortcutDimCode1 !== undefined &&
+      shortcutDimCode1 !== null &&
+      typeof shortcutDimCode1 !== "string"
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Shortcut dimension code 1 must be a string or null" });
+    }
+
+    if (
+      shortcutDimCode2 !== undefined &&
+      shortcutDimCode2 !== null &&
+      typeof shortcutDimCode2 !== "string"
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Shortcut dimension code 2 must be a string or null" });
+    }
+
     // Check if settings exist, if not create them
     const existingSettings = await Settings.findOne({ _id: "1" });
 
@@ -114,6 +187,11 @@ export const UpdateSettings = async (req: Request, res: Response) => {
         updateData.allowCompanyChange = allowCompanyChange;
       if (themeColor !== undefined) updateData.themeColor = themeColor;
       if (companyLogo !== undefined) updateData.companyLogo = companyLogo;
+      if (favicon !== undefined) updateData.favicon = favicon;
+      if (shortcutDimCode1 !== undefined)
+        updateData.shortcutDimCode1 = shortcutDimCode1;
+      if (shortcutDimCode2 !== undefined)
+        updateData.shortcutDimCode2 = shortcutDimCode2;
 
       console.log(
         `💾 Saving logo data with length: ${
@@ -130,6 +208,9 @@ export const UpdateSettings = async (req: Request, res: Response) => {
         allowCompanyChange: allowCompanyChange ?? false,
         themeColor: themeColor ?? "#094BAC",
         companyLogo,
+        favicon: favicon ?? null,
+        shortcutDimCode1: shortcutDimCode1 ?? "",
+        shortcutDimCode2: shortcutDimCode2 ?? "",
       });
     }
 
