@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: demo-portal-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+      - key: BC_TENANT_1
+        sync: false
+      - key: BC_CLIENT_ID_1
+        sync: false
+      - key: BC_CLIENT_SECRET_1
+        sync: false
+      - key: BC_EMAIL_1
+        sync: false
+      - key: BC_PASSWORD_1
+        sync: false
+      - key: BC_COMPANY_ID_1
+        sync: false
+      - key: BC_TENANT_2
+        sync: false
+      - key: BC_CLIENT_ID_2
+        sync: false
+      - key: BC_CLIENT_SECRET_2
+        sync: false
+      - key: BC_EMAIL_2
+        sync: false
+      - key: BC_PASSWORD_2
+        sync: false
+      - key: BC_COMPANY_ID_2
+        sync: false
